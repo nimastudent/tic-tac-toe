@@ -24,7 +24,7 @@ const ChessBoard :React.FC<IChessBoard> = ({ blackIsNext, squares, onPlay }) => 
         if (squares[rowIdnex][itemIndex] || winner) {
             return;
         }
-        const nextSquares = squares.slice();
+        const nextSquares = JSON.parse(JSON.stringify(squares));
         if (blackIsNext) {
             nextSquares[rowIdnex][itemIndex] = 'black';
         } else {
@@ -40,18 +40,17 @@ const ChessBoard :React.FC<IChessBoard> = ({ blackIsNext, squares, onPlay }) => 
      * @params rowIndex 当前棋子落子行下标
      * @params itemIndex 当前棋子落子列下标
      */
-    function calculateWinner (quares:any, rowIndex:number, itemIndex:number) {
-        const currentChess = quares[rowIndex][itemIndex];
+    function calculateWinner (squares:any, rowIndex:number, itemIndex:number) {
+        const currentChess = squares[rowIndex][itemIndex];
         // 搜索方向数组 五子棋周围有8个方向 获胜计算根据一种方向 所以将两个方向分为一组
         const caculArr =  [[[-1, 0], [1, 0]], [[0, 1], [0, -1]], [[-1, -1], [1, 1]], [[-1, 1], [1, -1]]];
         caculArr.forEach(direct => {
             // 方向ab
             const [[aRowAdd, aItemAdd], [bRowAdd, bItemAdd]] = direct;
-
             const aDireRes = searchWinner(squares, rowIndex, itemIndex, aRowAdd, aItemAdd, currentChess, 0);
             const bDireRes = searchWinner(squares, rowIndex, itemIndex, bRowAdd, bItemAdd, currentChess, 0);
             const totalCount = aDireRes + bDireRes;
-            if (totalCount === 4) {
+            if (totalCount >= 4) {
                 setWinner(currentChess);
             }
         });

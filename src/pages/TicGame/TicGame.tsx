@@ -3,8 +3,8 @@ import Board from '../../components/board/board';
 import './style.css';
 
 /**
- * 井字棋游戏组件
- */
+* 井字棋游戏组件
+*/
 const TicGame = () => {
     const [xIsNext, setXIsNext] = useState<boolean>(true);
     const [history, setHistory] = useState<Array<Array<string | null>>>([Array(9).fill(null)]);
@@ -12,9 +12,9 @@ const TicGame = () => {
     const currentSquares: Array<string | null> = history[currentMove];
 
     /**
- * 用户点击棋盘处理函数
- * @param nextSquares 点击后的棋局
- */
+    * 用户点击棋盘处理函数
+    * @param nextSquares 点击后的棋局
+    */
     function handlePlay (nextSquares: Array<string | null>) {
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
         setHistory(nextHistory);
@@ -24,7 +24,7 @@ const TicGame = () => {
 
     /**
      * 用户点击历史步骤处理函数
-     * @params nextMove 跳转到哪一步
+     * @param nextMove 跳转到哪一步
      */
     function jumpTo (nextMove:number) {
         setCurrentMove(nextMove);

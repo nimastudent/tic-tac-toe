@@ -9,6 +9,7 @@ function App () {
 
     /**
      * 处理用户选择游戏类型
+     * @param event 用户点击事件
      */
     function handleGameTypeChange (event:React.ChangeEvent<HTMLSelectElement>) {
         setGameType(event.target.value);
