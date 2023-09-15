@@ -1,0 +1,11 @@
+.fiveGame {
+    padding-top:20px;
+    display:flex;
+}
+
+.game-info{
+    margin-top:20px;
+
+    height:450px;
+    overflow:auto;
+}
