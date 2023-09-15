@@ -11,7 +11,7 @@ interface IChessProps{
  */
 const Chess :React.FC<IChessProps> = ({ value, handleUserClick }) => {
     return (
-        <button className={`square ${value}`} onClick={handleUserClick}></button>
+        <button className={`square ${value && value === 'black' ? 'black' : ''} ${value && value === 'white' ? 'white' : ''}`} onClick={handleUserClick}></button>
     );
 };
 
