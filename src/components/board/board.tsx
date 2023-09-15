@@ -13,7 +13,6 @@ interface IBoardProps{
  * @param squares Array
  */
 const Board :React.FC<IBoardProps> = ({ xIsNext, squares, onPlay }) => {
-    // const [squares, setSquares] = useState<Array<string|null>>(Array(9).fill(null));
     /**
      * 处理点击棋盘
      * @param index 传入点击哪个格子
