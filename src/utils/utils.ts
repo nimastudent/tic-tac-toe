@@ -1,4 +1,29 @@
 /**
+     * 搜索落子周围棋子进行计算胜者方法
+     * @params quares 当前棋局数组
+     * @params rowIndex 当前棋子落子行下标
+     * @params itemIndex 当前棋子落子列下标
+     */
+export function calculateWinner (squares:any, rowIndex:number, itemIndex:number) {
+    const currentChess = squares[rowIndex][itemIndex];
+    // 搜索方向数组 五子棋周围有8个方向 获胜计算根据一种方向 所以将两个方向分为一组
+    const caculArr =  [[[-1, 0], [1, 0]], [[0, 1], [0, -1]], [[-1, -1], [1, 1]], [[-1, 1], [1, -1]]];
+
+    for (let ind = 0; ind < caculArr.length; ind++) {
+        // 方向ab
+        const [[aRowAdd, aItemAdd], [bRowAdd, bItemAdd]] = caculArr[ind];
+        const aDireRes = searchWinner(squares, rowIndex, itemIndex, aRowAdd, aItemAdd, currentChess, 0);
+        const bDireRes = searchWinner(squares, rowIndex, itemIndex, bRowAdd, bItemAdd, currentChess, 0);
+        const totalCount = aDireRes + bDireRes;
+        if (totalCount >= 4) {
+            return currentChess;
+        }
+    }
+
+    return null;
+}
+
+/**
  * 通过递归根据搜索方向查找连子个数
  * @param squares 当前棋局
  * @param rowInd 落子行下标
