@@ -7,7 +7,9 @@ interface IChessProps{
 }
 
 /**
- * 棋子组件
+ * 五子棋棋子组件
+ * @param value 该棋子的值
+ * @param handleUserClick 点击棋子触发事件
  */
 const Chess :React.FC<IChessProps> = ({ value, handleUserClick }) => {
     return (

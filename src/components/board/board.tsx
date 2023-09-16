@@ -9,12 +9,12 @@ interface IBoardProps{
 
 /**
  * 棋盘组件
- * @param xIsNext boolean
- * @param squares Array
+ * @param xIsNext 是否轮到X点击
+ * @param squares 棋局数组
  */
 const Board :React.FC<IBoardProps> = ({ xIsNext, squares, onPlay }) => {
     /**
-     * 处理点击棋盘
+     * 处理用户点击棋盘
      * @param index 传入点击哪个格子
      */
     function handleClick (index: number) {

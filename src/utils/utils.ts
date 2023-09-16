@@ -34,7 +34,7 @@ export function calculateWinner (squares:any, rowIndex:number, itemIndex:number)
  * @param temp 临时变量计算连子数
  * @returns 该方向上连子个数
  */
-export function searchWinner (squares:Array<Array<null|string>>, rowInd:number, itemInd:number, rowAdd:number, itemAdd:number, color:string, temp:number) :number {
+function searchWinner (squares:Array<Array<null|string>>, rowInd:number, itemInd:number, rowAdd:number, itemAdd:number, color:string, temp:number) :number {
     const afterRowInd = rowInd + rowAdd;
     const afterItemInd = itemInd + itemAdd;
     // 判断下标是否越界

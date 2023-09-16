@@ -19,6 +19,8 @@ const FiveGame = () => {
 
     /**
      * 处理用户点击后记录棋局
+     * @param nextSquares 点击后棋局
+     * @param nextStep 点击函数
      */
     function handlePlay (nextSquares: Array<Array<string|null>>, nextStep: Array<number>) {
         const nextHistory = [...histroy.slice(0, currentMove + 1), nextSquares];

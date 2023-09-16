@@ -1,5 +1,6 @@
 import Chess from '../chess/chess';
 import './style.css';
+
 interface IChessBoard{
     winner: string|null;
     blackIsNext: boolean;
@@ -9,6 +10,10 @@ interface IChessBoard{
 
 /**
  * 五子棋棋盘组件
+ * @param winner 胜者
+ * @param blackIsNext 是否轮到黑子点击
+ * @param squares 当前棋局
+ * @param onPlay 棋局记录方法
  */
 const ChessBoard :React.FC<IChessBoard> = ({ winner, blackIsNext, squares, onPlay }) => {
     /**
@@ -27,7 +32,6 @@ const ChessBoard :React.FC<IChessBoard> = ({ winner, blackIsNext, squares, onPla
             nextSquares[rowIdnex][itemIndex] = 'white';
         }
         onPlay(nextSquares, [rowIdnex, itemIndex]);
-        // calculateWinner(nextSquares, [rowIdnex, itemIndex]);
     }
 
     let status;
