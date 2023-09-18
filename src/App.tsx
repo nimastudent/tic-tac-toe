@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import TicGame from './pages/TicGame/TicGame';
-import FiveGame from './pages/FiveGame/FiveGame';
+import React from 'react';
+import MyBoard from './components/MyBoard';
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { changeGameType } from './store/featrues/game';
+import { eGameType } from './utils/constant';
 
 /**
  */
 function App () {
-    const [gameType, setGameType] = useState('fiveGame');
+    const gameType = useAppSelector((state) => state.game.gameType);
+    const dispatch = useAppDispatch();
 
     /**
      * 处理用户选择游戏类型
      * @param event 用户点击事件
      */
     function handleGameTypeChange (event:React.ChangeEvent<HTMLSelectElement>) {
-        setGameType(event.target.value);
+        dispatch(changeGameType(event.target.value));
     }
 
     return (
@@ -20,13 +23,11 @@ function App () {
             <label
             >choose your game
                 <select value={gameType} onChange={(eve) => handleGameTypeChange(eve)}>
-                    <option value="ticGame">井字棋</option>
-                    <option value="fiveGame">五子棋</option>
+                    <option value={eGameType.TIC}>井字棋</option>
+                    <option value={eGameType.FIVE}>五子棋</option>
                 </select>
             </label>
-            {gameType === 'ticGame' && <TicGame />}
-            {gameType === 'fiveGame' && <FiveGame />}
-
+            <MyBoard />
         </div>
     );
 }
