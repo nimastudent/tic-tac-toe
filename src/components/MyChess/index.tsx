@@ -1,32 +1,32 @@
-import React from "react";
+import React from 'react';
 import './style.css';
+import { chessStyle } from '../../utils/constant';
 
 interface IChess {
     value: string | null;
     chessType: string;
-    onPlay: () => void;
+    rowInd: number;
+    colInd: number;
+    onPlay: (rowInd: number, col: number) => void;
 }
+
 /**
- *
- * @returns
+ * 棋子组件
+ * @param value 棋子的值
+ * @param rowInd 行坐标
+ * @param colInd 列坐标
+ * @param chessType 棋子类型
+ * @param onPlay 点击棋子触发函数
  */
-const Chess: React.FC<IChess> = ({ value, chessType, onPlay }) => {
-    console.error(value);
-    /**
-     *
-     */
-    const onChessClick = () => {
-        onPlay();
-    };
+const Chess: React.FC<IChess> = ({ value, rowInd, colInd, chessType, onPlay }) => {
     return (
         chessType === 'ticChess'
-            // eslint-disable-next-line no-nested-ternary
-            ? (<button className="square" onClick={onChessClick}>{value === null ? '' : value === '1' ? 'X' : 'O'}</button>)
-            : (<button className={`square ${value && value === '1' ? 'black' : ''} ${value && value === '0' ? 'white' : ''}`} onClick={onChessClick}></button>)
+            ? (<button className="square"
+                onClick={() => onPlay(rowInd, colInd)}>{value ? chessStyle[chessType][value] : ''}</button>)
+            : (<button
+                className={`square ${value && chessStyle[chessType][value]}`}
+                onClick={() => onPlay(rowInd, colInd)}></button>)
     );
 };
 
-// 使用 React.memo
-export default React.memo(Chess, (prevProps, nextProps) => {
-    return prevProps.value === nextProps.value;
-});
+export default React.memo(Chess);
