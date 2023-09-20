@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import TicGame from './pages/TicGame/TicGame';
-import FiveGame from './pages/FiveGame/FiveGame';
+import MyBoard from './components/MyBoard';
 
 /**
  */
 function App () {
-    const [gameType, setGameType] = useState('fiveGame');
+    const [gameType, setGameType] = useState<string>('five');
 
     /**
      * 处理用户选择游戏类型
@@ -16,17 +15,16 @@ function App () {
     }
 
     return (
+
         <div className="App">
             <label
             >choose your game
                 <select value={gameType} onChange={(eve) => handleGameTypeChange(eve)}>
-                    <option value="ticGame">井字棋</option>
-                    <option value="fiveGame">五子棋</option>
+                    <option value="tic">井字棋</option>
+                    <option value="five">五子棋</option>
                 </select>
             </label>
-            {gameType === 'ticGame' && <TicGame />}
-            {gameType === 'fiveGame' && <FiveGame />}
-
+            <MyBoard gameType={gameType} />
         </div>
     );
 }
