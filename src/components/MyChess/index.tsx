@@ -15,13 +15,20 @@ interface IChess {
  * @param chessType 棋子类型
  * @param onPlay 点击棋子触发函数
  */
-const Chess: React.FC<IChess> = ({ value, chessType }) => {
-    return (
-        chessType === 'ticChess'
-            ? (<button className="square">{value ? chessStyle[chessType][value] : ''}</button>)
-            : (<button
-                className={`square ${value && chessStyle[chessType][value]}`}></button>)
-    );
-};
+class Chess extends React.PureComponent<IChess> {
+    constructor (props: IChess) {
+        super(props);
+    }
+    render () {
+        const { value, chessType } = this.props;
+        return (
+            chessType === 'ticChess'
+                ? (<button className="square">{value ? chessStyle[chessType][value] : ''}</button>)
+                : (<button
+                    className={`square 
+                        ${value && chessStyle[chessType][value]}`}></button>)
+        );
+    }
+}
 
-export default React.memo(Chess);
+export default Chess;

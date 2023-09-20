@@ -1,4 +1,4 @@
-export interface IGame {
+export interface IGameConfig {
     boardSize: number;
     winCondition: number;
     chessType: eChessType;
@@ -6,6 +6,11 @@ export interface IGame {
 
 interface iChessStyle {
     [key: string]: {[key: string]: string};
+}
+
+export enum eGameType {
+    FIVE='five',
+    TIC='tic'
 }
 
 export enum eChessType {
@@ -25,13 +30,13 @@ export const chessStyle : iChessStyle = {
 };
 
 // 初始化配置
-const InitialData: {[key:string]: IGame} = {
-    five: {
+const InitialData: {[key:string]: IGameConfig} = {
+    [eGameType.FIVE]: {
         boardSize: 15,
         winCondition: 5,
         chessType: eChessType.CIRLECHESS,
     },
-    tic: {
+    [eGameType.TIC]: {
         boardSize: 3,
         winCondition: 3,
         chessType: eChessType.TICCHESS,
