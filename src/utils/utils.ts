@@ -1,4 +1,4 @@
-import { IGame, chessStyle, eChessType } from './constant';
+import { IGame } from './constant';
 
 /**
      * 搜索落子周围棋子进行计算胜者方法
@@ -70,25 +70,4 @@ function searchWinner (
         temp,
         gameConfig
     );
-}
-
-/**
- * 根据游戏类型计算下一个玩家
- * @param chessType 棋子类型
- * @param xIsNext x是否为下一个
- * @returns 下一个玩家
- */
-export function computedNextPlayer (chessType: string, xIsNext: boolean) {
-    let res;
-    switch (chessType) {
-        case eChessType.CIRLECHESS:
-            res = xIsNext ? chessStyle[chessType]['1'] : 'white';
-            break;
-        case eChessType.TICCHESS:
-            res = xIsNext ? 'X' : 'O';
-            break;
-        default:
-            break;
-    }
-    return res;
 }

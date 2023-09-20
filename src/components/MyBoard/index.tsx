@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import InitialData, { chessStyle } from '../../utils/constant';
-import Chess from '../MyChess';
 import './style.css';
-import { calculateWinner, computedNextPlayer } from '../../utils/utils';
+import { calculateWinner } from '../../utils/utils';
+import MyChess from '../MyChess';
 
 interface IBoardProps {
     gameType: string;
@@ -41,7 +41,7 @@ const MyBoard: React.FC<IBoardProps> = ({ gameType }) => {
      * @params rowIndex 棋局行坐标
      * @params cloIndex 棋局列坐标
      */
-    const onPlay = (rowIndex: number, cloIndex: number) => {
+    const onPlay = useMemo(() => (rowIndex: number, cloIndex: number) => {
         if (squares[rowIndex][cloIndex] || winner) return;
         const nextSquares = squares.slice();
         const nextHistory = stepHistory.slice(0, currentMove + 1);
@@ -63,7 +63,8 @@ const MyBoard: React.FC<IBoardProps> = ({ gameType }) => {
         setCurrentMove(nextHistory.length - 1);
         const newWinner = calculateWinner(nextSquares, rowIndex, cloIndex, config[gameType]);
         setWinner(newWinner);
-    };
+    }, [squares, xIsNext]);
+
 
     /**
      * 回退或者前进步数
@@ -111,7 +112,7 @@ const MyBoard: React.FC<IBoardProps> = ({ gameType }) => {
     if (winner) {
         status = `winner is : ${chessStyle[chessType][winner]}`;
     } else {
-        status = `next player is: ${computedNextPlayer(chessType, xIsNext)}`;
+        status = `next player is: ${xIsNext ? chessStyle[chessType]['1'] : chessStyle[chessType]['0']}`;
     }
 
     const moves = stepHistory.map((squares, move) => {
@@ -135,14 +136,14 @@ const MyBoard: React.FC<IBoardProps> = ({ gameType }) => {
                         return (<div key={rowIndex}>
                             {rows.map((cloumn, cloIndex) => {
                                 return (
-                                    <Chess
-                                        key={`${rowIndex}-${cloIndex}`}
-                                        value={squares[rowIndex][cloIndex]}
-                                        rowInd={rowIndex}
-                                        colInd={cloIndex}
-                                        chessType={chessType}
-                                        onPlay={onPlay}
-                                    />
+                                    <span key={`${rowIndex}-${cloIndex}`}
+                                        onClick={() => onPlay(rowIndex, cloIndex)}
+                                    >
+                                        <MyChess
+                                            value={squares[rowIndex][cloIndex]}
+                                            chessType={chessType}
+                                        />
+                                    </span>
                                 );
                             })}
                         </div>);

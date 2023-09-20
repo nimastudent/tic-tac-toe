@@ -5,9 +5,6 @@ import { chessStyle } from '../../utils/constant';
 interface IChess {
     value: string | null;
     chessType: string;
-    rowInd: number;
-    colInd: number;
-    onPlay: (rowInd: number, col: number) => void;
 }
 
 /**
@@ -18,14 +15,12 @@ interface IChess {
  * @param chessType 棋子类型
  * @param onPlay 点击棋子触发函数
  */
-const Chess: React.FC<IChess> = ({ value, rowInd, colInd, chessType, onPlay }) => {
+const Chess: React.FC<IChess> = ({ value, chessType }) => {
     return (
         chessType === 'ticChess'
-            ? (<button className="square"
-                onClick={() => onPlay(rowInd, colInd)}>{value ? chessStyle[chessType][value] : ''}</button>)
+            ? (<button className="square">{value ? chessStyle[chessType][value] : ''}</button>)
             : (<button
-                className={`square ${value && chessStyle[chessType][value]}`}
-                onClick={() => onPlay(rowInd, colInd)}></button>)
+                className={`square ${value && chessStyle[chessType][value]}`}></button>)
     );
 };
 
