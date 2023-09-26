@@ -1,7 +1,7 @@
 import React from 'react';
 import MyBoard from './components/MyBoard';
 import { eGameType } from './utils/constant';
-import { RootState } from './store';
+import store, { RootState } from './store';
 import { connect } from 'react-redux';
 import { changeGameType, changeIsAIFirst, onPlayStore } from './store/featrues/game';
 
@@ -9,7 +9,7 @@ import { changeGameType, changeIsAIFirst, onPlayStore } from './store/featrues/g
 interface IProps {
     gameType: string;
     isAIFirst: boolean;
-    changeGameType: (gameType: eGameType) => void;
+    changeGameType: (game: any) => void;
     changeIsAIFirst: (isAIFirst: boolean) => void;
     onPlayStore: (arg: any) => void;
 }
@@ -22,7 +22,13 @@ class App extends React.Component<IProps> {
      * 处理切换游戏类型
     */
     handleGameTypeChange (event:React.ChangeEvent<HTMLSelectElement>) {
-        this.props.changeGameType(event.target.value as eGameType);
+        const currentGame = store.getState();
+        let gameHistory = JSON.parse(window.sessionStorage.getItem('game') as string);
+        if (gameHistory !== null && gameHistory.game.gameType === this.props.gameType) {
+            gameHistory = null;
+        }
+        this.props.changeGameType({ gameType: event.target.value as eGameType, gameHistory });
+        window.sessionStorage.setItem('game', JSON.stringify(currentGame));
     }
 
     /**

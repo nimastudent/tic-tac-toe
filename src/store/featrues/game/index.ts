@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../..';
 import InitialData, { IGameConfig, eGameType } from '../../../utils/constant';
 import { calculateWinner, initSquares } from '../../../utils/utils';
 
@@ -18,7 +17,6 @@ interface IGame {
     stepHistory: Array<IStepObj>;
     winner: string|null;
     config: IGameConfig;
-    isThinking: boolean;
 }
 
 const initialState: IGame = {
@@ -30,16 +28,12 @@ const initialState: IGame = {
     stepHistory: [{} as IStepObj],
     winner: null,
     config: InitialData[eGameType.TIC],
-    isThinking: false,
 };
 
 export const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        setThinking: (state, action) => {
-            state.isThinking = action.payload;
-        },
         changeIsAIFirst: (state, action) => {
             state.isAIFirst = action.payload;
             state.squares = initSquares(InitialData[eGameType.TIC].boardSize);
@@ -49,14 +43,25 @@ export const gameSlice = createSlice({
             state.currentMove = 0;
         },
         changeGameType: (state, action) => {
-            const gameType = action.payload;
-            state.config = InitialData[gameType];
-            state.gameType = gameType;
-            state.xIsNext = true;
-            state.currentMove = 0;
-            state.squares = initSquares(InitialData[gameType].boardSize);
-            state.stepHistory = [{} as IStepObj];
-            state.winner = null;
+            const { gameType, gameHistory } = action.payload;
+            if (!gameHistory) {
+                state.config = InitialData[gameType];
+                state.gameType = gameType;
+                state.xIsNext = true;
+                state.currentMove = 0;
+                state.squares = initSquares(InitialData[gameType].boardSize);
+                state.stepHistory = [{} as IStepObj];
+                state.winner = null;
+            } else {
+                const { game } = gameHistory;
+                state.gameType = game.gameType;
+                state.config = game.config;
+                state.xIsNext = game.xIsNext;
+                state.currentMove = game.currentMove;
+                state.squares = game.squares;
+                state.stepHistory = game.stepHistory;
+                state.winner = game.winner;
+            }
         },
         /**
          * 玩家点击棋盘落子 更新state
@@ -121,12 +126,6 @@ export const {
     changeGameType,
     onPlayStore,
     jumpToStore,
-    setThinking,
 } = gameSlice.actions;
-
-/**
- * 获取游戏参数
- */
-export const getGameConfig = (state: RootState) => InitialData[state.game.gameType];
 
 export default gameSlice.reducer;
