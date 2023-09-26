@@ -10,6 +10,7 @@ interface IStepObj {
 }
 
 interface IGame {
+    isAIFirst: boolean;
     gameType: string;
     xIsNext: boolean;
     currentMove: number;
@@ -17,22 +18,36 @@ interface IGame {
     stepHistory: Array<IStepObj>;
     winner: string|null;
     config: IGameConfig;
+    isThinking: boolean;
 }
 
 const initialState: IGame = {
-    gameType: eGameType.FIVE,
+    isAIFirst: false,
+    gameType: eGameType.TIC,
     xIsNext: true,
     currentMove: 0,
-    squares: initSquares(InitialData[eGameType.FIVE].boardSize),
+    squares: initSquares(InitialData[eGameType.TIC].boardSize),
     stepHistory: [{} as IStepObj],
     winner: null,
-    config: InitialData[eGameType.FIVE],
+    config: InitialData[eGameType.TIC],
+    isThinking: false,
 };
 
 export const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
+        setThinking: (state, action) => {
+            state.isThinking = action.payload;
+        },
+        changeIsAIFirst: (state, action) => {
+            state.isAIFirst = action.payload;
+            state.squares = initSquares(InitialData[eGameType.TIC].boardSize);
+            state.xIsNext = true;
+            state.stepHistory = [{} as IStepObj];
+            state.winner = null;
+            state.currentMove = 0;
+        },
         changeGameType: (state, action) => {
             const gameType = action.payload;
             state.config = InitialData[gameType];
@@ -58,7 +73,8 @@ export const gameSlice = createSlice({
                 cloInd: cloIndex,
                 chess: putChess,
             });
-            state.xIsNext = !xIsNext;
+            const nextIsXNext = !xIsNext;
+            state.xIsNext = nextIsXNext;
             state.squares = nextSquares;
             state.stepHistory = nextStepHistory;
             state.currentMove = nextStepHistory.length - 1;
@@ -101,9 +117,11 @@ export const gameSlice = createSlice({
 });
 
 export const {
+    changeIsAIFirst,
     changeGameType,
     onPlayStore,
     jumpToStore,
+    setThinking,
 } = gameSlice.actions;
 
 /**

@@ -30,7 +30,7 @@ export const chessStyle : iChessStyle = {
 };
 
 // 初始化配置
-const InitialData: {[key:string]: IGameConfig} = {
+const InitialData:{[key: string]: IGameConfig} = {
     [eGameType.FIVE]: {
         boardSize: 15,
         winCondition: 5,

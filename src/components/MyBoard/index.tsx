@@ -1,12 +1,15 @@
-import { IGameConfig, chessStyle } from '../../utils/constant';
+import { IGameConfig, chessStyle, eGameType } from '../../utils/constant';
 import './style.css';
 import MyChess from '../MyChess';
 import React from 'react';
 import { RootState } from '../../store';
 import { connect } from 'react-redux';
 import { jumpToStore, onPlayStore } from '../../store/featrues/game';
+import { aiPlay } from '../../utils/ai';
 
 interface IBoardProps {
+    isAIFirst: boolean;
+    config: IGameConfig;
     squares: Array<Array<string | null>>;
     currentMove: number;
     stepHistory: Array<IStepObj>;
@@ -15,7 +18,6 @@ interface IBoardProps {
     gameType: string;
     onPlayStore: (arg : any) => void;
     jumpToStore: (move: number) => void;
-    config: IGameConfig;
 }
 
 
@@ -25,15 +27,39 @@ interface IStepObj {
     chess: string;
 }
 
+interface IState {
+    waiting: boolean;
+}
+
 /**
  * 棋盘组件
  * @param gameType 游戏类型
  */
-class MyBoard extends React.Component<IBoardProps> {
+class MyBoard extends React.Component<IBoardProps, IState> {
     constructor (props: IBoardProps) {
         super(props);
+        this.state = { waiting: false };
     }
 
+
+    /** */
+    componentDidUpdate (): void {
+        const { isAIFirst, currentMove, squares, onPlayStore, gameType, winner  } = this.props;
+        // 是否为井字棋 且 没有胜者
+        if (gameType === eGameType.TIC && !winner) {
+            let aiStep;
+            // ai先手 是否轮到ai
+            if (isAIFirst && currentMove % 2 === 0) {
+                aiStep = aiPlay(squares, isAIFirst) as unknown as number[];
+            // ai后手是否轮到ai
+            } else if (!isAIFirst && currentMove % 2 === 1) {
+                aiStep = aiPlay(squares, isAIFirst) as unknown as number[];
+            }
+            if (!aiStep) return;
+            const [rowIndex, cloIndex] = aiStep;
+            onPlayStore({ rowIndex, cloIndex });
+        }
+    }
 
     /**
      * 处理玩家点击棋盘函数
@@ -118,6 +144,7 @@ const mapStateToProps = (state: RootState) => ({
     winner: state.game.winner,
     gameType: state.game.gameType,
     config: state.game.config,
+    isAIFirst: state.game.isAIFirst,
 });
 
 export default connect(mapStateToProps, { onPlayStore, jumpToStore })(MyBoard);
