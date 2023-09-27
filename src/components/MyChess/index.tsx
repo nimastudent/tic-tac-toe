@@ -5,6 +5,9 @@ import { chessStyle } from '../../utils/constant';
 interface IChess {
     value: string | null;
     chessType: string;
+    handleClick: (rowIndex:number, colIndex:number) => void;
+    rowIndex:number;
+    colIndex:number;
 }
 
 /**
@@ -19,12 +22,17 @@ class Chess extends React.PureComponent<IChess> {
     constructor (props: IChess) {
         super(props);
     }
+
+
     render () {
-        const { value, chessType } = this.props;
+        const { value, chessType, handleClick, rowIndex, colIndex } = this.props;
+
         return (
             chessType === 'ticChess'
-                ? (<button className="square">{value ? chessStyle[chessType][value] : ''}</button>)
+                ? (<button
+                    className="square" onClick={() => handleClick(rowIndex, colIndex)}>{value ? chessStyle[chessType][value] : ''}</button>)
                 : (<button
+                    onClick={() => handleClick(rowIndex, colIndex)}
                     className={`square 
                         ${value && chessStyle[chessType][value]}`}></button>)
         );

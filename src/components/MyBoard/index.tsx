@@ -39,6 +39,7 @@ class MyBoard extends React.Component<IBoardProps, IState> {
     constructor (props: IBoardProps) {
         super(props);
         this.state = { waiting: false };
+        this.onPlay = this.onPlay.bind(this);
     }
 
 
@@ -66,7 +67,7 @@ class MyBoard extends React.Component<IBoardProps, IState> {
      * @params rowIndex 棋局行坐标
      * @params cloIndex 棋局列坐标
      */
-    onPlay (rowIndex: number, cloIndex: number) {
+    onPlay (rowIndex: number, cloIndex: number) : void {
         const { squares, winner, onPlayStore } = this.props;
         if (squares[rowIndex][cloIndex] || winner) return;
         onPlayStore({ rowIndex, cloIndex });
@@ -113,14 +114,14 @@ class MyBoard extends React.Component<IBoardProps, IState> {
                             return (<div key={rowIndex}>
                                 {rows.map((cloumn, cloIndex) => {
                                     return (
-                                        <span key={`${rowIndex}-${cloIndex}`}
-                                            onClick={() => this.onPlay(rowIndex, cloIndex)}
-                                        >
-                                            <MyChess
-                                                value={squares[rowIndex][cloIndex]}
-                                                chessType={chessType}
-                                            />
-                                        </span>
+                                        <MyChess
+                                            key={`${rowIndex}-${cloIndex}`}
+                                            rowIndex={rowIndex}
+                                            colIndex={cloIndex}
+                                            handleClick={this.onPlay}
+                                            value={squares[rowIndex][cloIndex]}
+                                            chessType={chessType}
+                                        />
                                     );
                                 })}
                             </div>);
