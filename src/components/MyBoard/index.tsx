@@ -7,6 +7,7 @@ import {
     jumpToStore,
     onPlayStore,
 } from '../../store/featrues/game';
+import { useMemo } from 'react';
 
 /**
  * 棋盘组件
@@ -57,23 +58,25 @@ const MyBoard = () => {
         </li>);
     });
 
+    const memoList = useMemo(() => squares, [squares]);
+
     return (
         <>
             <div>{status}</div>
             <div className='game'>
                 <div className='container'>
-                    {squares.map((rows, rowIndex) => {
+                    {memoList.map((rows, rowIndex) => {
                         return (<div key={rowIndex}>
                             {rows.map((cloumn, cloIndex) => {
                                 return (
-                                    <span key={`${rowIndex}-${cloIndex}`}
-                                        onClick={() => onPlay(rowIndex, cloIndex)}
-                                    >
-                                        <MyChess
-                                            value={squares[rowIndex][cloIndex]}
-                                            chessType={chessType}
-                                        />
-                                    </span>
+                                    <MyChess
+                                        key={`${rowIndex}-${cloIndex}`}
+                                        value={squares[rowIndex][cloIndex]}
+                                        chessType={chessType}
+                                        rowIndex={rowIndex}
+                                        colIndex={cloIndex}
+                                        handleClick={onPlay}
+                                    />
                                 );
                             })}
                         </div>);
